@@ -32,6 +32,10 @@ def get_historic_btc_price(id, vs_currency):
     market_caps.columns = ['timestamp', 'market_cap']
     market_caps = market_caps.drop('timestamp', axis =1)
     market_caps['market_cap'] = market_caps.market_cap.str.replace(']', '')
+    market_caps['market_cap'] = market_caps['market_cap'].replace(' None', np.NaN)
+    market_caps['market_cap'] = market_caps['market_cap'].fillna('0.0').astype(float)
+    market_caps['market_cap'] = market_caps['market_cap'].fillna(method ='bfill')
+
 
     #tidy total_volume column and remove timestamp
     total_volume = historic_bitcoin_price.total_volumes.astype(str)
